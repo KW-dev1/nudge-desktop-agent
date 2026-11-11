@@ -157,3 +157,23 @@ export type ConnectionTest = {
   error?: string;
   sources: { label: string; ok: boolean; error?: string }[];
 };
+
+/** Everything the popup window needs to draw itself. Sent on every change. */
+export type PopupPayload = {
+  /** The stack of open alerts. Empty means the popup should close. */
+  alerts: FiredAlert[];
+  appearance: Appearance;
+  sound: boolean;
+  /** Default snooze length for the main Snooze button, in minutes. */
+  snoozeMinutes: number;
+  /** Goes up by one each time a new alert arrives. The popup chimes on change. */
+  chime: number;
+  /**
+   * True when the OS draws a blurred backdrop for the whole window. The card
+   * then fills the window edge to edge and the OS rounds the corners.
+   */
+  osBlur: boolean;
+};
+
+/** Result of a popup action that can fail, such as Mark done. */
+export type ActionResult = { ok: true } | { ok: false; error: string };
