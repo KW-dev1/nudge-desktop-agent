@@ -25,6 +25,11 @@ export default defineConfig({
   renderer: {
     root: resolve('src/renderer'),
     plugins: [react(), tailwindcss()],
+    // Use the IPv4 loopback address, not "localhost". On Windows "localhost"
+    // can resolve to IPv6 (::1) for the server and IPv4 for Electron, or the
+    // other way round, and the window then loads nothing
+    // (ERR_CONNECTION_REFUSED).
+    server: { host: '127.0.0.1' },
     build: {
       rollupOptions: {
         // Two pages: the main window and the always-on-top popup.
