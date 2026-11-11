@@ -1,6 +1,7 @@
 import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { buildTheme, readableText } from '../../shared/color';
+import { NotionSection } from './components/NotionSection';
 import { RemindersTab } from './components/RemindersTab';
 import { SettingsTab } from './components/SettingsTab';
 import { SyncFooter } from './components/SyncFooter';
@@ -54,7 +55,11 @@ function MainApp() {
         <div className="mx-auto max-w-[760px] px-6 py-6">
           {tab === 'Upcoming' && <UpcomingTab data={data} />}
           {tab === 'Reminders' && <RemindersTab data={data} />}
-          {tab === 'Settings' && <SettingsTab data={data} />}
+          {tab === 'Settings' && (
+            <SettingsTab data={data}>
+              <NotionSection data={data} />
+            </SettingsTab>
+          )}
         </div>
       </main>
 
