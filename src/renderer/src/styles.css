@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+/* System font stack: looks native on Windows 11 (Segoe UI Variable) and macOS. */
+:root {
+  font-family: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}

@@ -1,0 +1,39 @@
+{
+  "name": "nudge-desktop-agent",
+  "productName": "Nudge",
+  "version": "0.1.0",
+  "description": "Desktop reminder popups for meetings, tasks, and follow-ups from Notion and manual entry.",
+  "author": "KW-dev1 <contact@kennethwebber.com>",
+  "private": true,
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "preview": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "^45.3.0",
+    "electron-builder": "^26.18.0",
+    "electron-vite": "^6.0.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  },
+  "dependencies": {
+    "@notionhq/client": "^5.31.1",
+    "electron-store": "^12.0.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  }
+}
