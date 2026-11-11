@@ -1,0 +1,33 @@
+# Builds the Windows installer on a real Windows machine.
+# Run it by hand from the Actions tab, or push a tag like v0.1.0.
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The scheduler rules and Notion mapping must pass before packaging.
+      - run: npm test
+
+      # Type-checks, bundles with electron-vite, then packages with electron-builder.
+      - run: npm run dist:win
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Nudge-Setup
+          path: dist/*.exe
+          if-no-files-found: error
