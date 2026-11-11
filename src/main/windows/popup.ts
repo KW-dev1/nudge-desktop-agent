@@ -1,10 +1,9 @@
 import { BrowserWindow, screen, type Display } from 'electron';
 import { release } from 'node:os';
-import type { FiredAlert, PopupPayload, Settings } from '../../shared/types';
+import { POPUP_CARD_WIDTH, type FiredAlert, type PopupPayload, type Settings } from '../../shared/types';
 import { preloadPath, rendererEntry } from '../paths';
 
-/** Width of the popup card in px. */
-const CARD_WIDTH = 440;
+const CARD_WIDTH = POPUP_CARD_WIDTH;
 /** Transparent space around the card so its soft shadow is not clipped. */
 const SHADOW_MARGIN = 28;
 /** How long the renderer gets to play its fade-out before the window hides. */

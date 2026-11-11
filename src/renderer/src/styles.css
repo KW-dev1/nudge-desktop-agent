@@ -87,7 +87,7 @@ body.popup-page {
   justify-content: center;
   gap: 6px;
   height: 34px;
-  padding: 0 14px;
+  padding: 0 12px;
   border-radius: calc(min(var(--nudge-radius), 20px) * 0.5 + 4px);
   font-size: 13px;
   font-weight: 600;
@@ -118,4 +118,60 @@ body.popup-page {
 
 .nudge-btn-primary:hover:not(:disabled) {
   background: var(--nudge-accent-hover);
+}
+
+/* --- Main window ---------------------------------------------------------- */
+
+.nudge-app {
+  background: var(--nudge-bg-solid);
+  color: var(--nudge-fg);
+}
+
+/* A raised panel: form cards, list groups, settings sections. */
+.nudge-panel {
+  background: var(--nudge-surface);
+  border: 1px solid var(--nudge-border);
+  border-radius: min(var(--nudge-radius), 20px);
+}
+
+.nudge-input {
+  height: 36px;
+  width: 100%;
+  padding: 0 12px;
+  border-radius: 10px;
+  border: 1px solid var(--nudge-border);
+  background: var(--nudge-bg-solid);
+  color: var(--nudge-fg);
+  font-size: 13px;
+}
+
+textarea.nudge-input {
+  height: auto;
+  padding: 8px 12px;
+  resize: vertical;
+}
+
+.nudge-input:focus-visible {
+  outline: 2px solid var(--nudge-accent-text);
+  outline-offset: 1px;
+}
+
+.nudge-input::placeholder {
+  color: var(--nudge-muted);
+}
+
+/* Sliders and check boxes pick up the accent color. */
+.nudge-app input[type='range'],
+.nudge-app input[type='checkbox'] {
+  accent-color: var(--nudge-accent);
+}
+
+.nudge-app ::-webkit-scrollbar {
+  width: 10px;
+}
+
+.nudge-app ::-webkit-scrollbar-thumb {
+  background: var(--nudge-border);
+  border-radius: 8px;
+  border: 2px solid var(--nudge-bg-solid);
 }

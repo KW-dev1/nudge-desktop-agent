@@ -128,6 +128,9 @@ export const DEFAULT_SETTINGS: Settings = {
   appearance: DEFAULT_APPEARANCE,
 };
 
+/** Width of the popup card in px. The window and the settings preview both use it. */
+export const POPUP_CARD_WIDTH = 480;
+
 /** Snooze lengths offered in the popup menu, in minutes. */
 export const SNOOZE_CHOICES = [5, 10, 30, 60] as const;
 

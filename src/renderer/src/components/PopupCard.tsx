@@ -148,10 +148,24 @@ export function PopupCard(props: PopupCardProps) {
       <div className="flex flex-col gap-1">
         <p className="text-sm font-semibold text-[var(--nudge-accent-text)]">{headline}</p>
         <h1 className="text-[22px] font-semibold leading-7 break-words">{item.title || 'Untitled'}</h1>
-        <p className="flex items-center gap-1.5 text-[13px] text-[var(--nudge-muted)]">
-          <ClockIcon size={14} />
-          {formatWhen(item)}
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="flex items-center gap-1.5 text-[13px] text-[var(--nudge-muted)]">
+            <ClockIcon size={14} />
+            {formatWhen(item)}
+          </p>
+          {/* Sits by the title rather than in the button row, which keeps
+              the row to one line even when every action is available. */}
+          {canOpen && (
+            <button
+              type="button"
+              onClick={props.onOpen}
+              className="flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 text-[13px] font-semibold text-[var(--nudge-accent-text)] hover:bg-[var(--nudge-surface)]"
+            >
+              Open in Notion
+              <ExternalIcon size={13} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Details. Empty fields are skipped; the whole block goes if all are. */}
@@ -171,14 +185,7 @@ export function PopupCard(props: PopupCardProps) {
       )}
 
       {/* Actions. */}
-      <footer className="flex flex-wrap items-center gap-2">
-        {canOpen && (
-          <button type="button" className="nudge-btn" onClick={props.onOpen}>
-            <ExternalIcon size={14} />
-            Open in Notion
-          </button>
-        )}
-
+      <footer className="flex items-center gap-2">
         {/* Snooze: the main button uses the default length, the arrow opens the menu. */}
         <div ref={menuRef} className="relative flex">
           <button
