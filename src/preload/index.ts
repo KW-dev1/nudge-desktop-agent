@@ -1,6 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type { ReminderInput } from '../shared/reminders';
-import type { ActionResult, ManualReminder, PopupPayload, ReminderItem, Settings, SyncStatus } from '../shared/types';
+import type {
+  ActionResult,
+  ConnectionTest,
+  ManualReminder,
+  PopupPayload,
+  ReminderItem,
+  Settings,
+  SyncStatus,
+} from '../shared/types';
 
 /** Subscribe to a channel pushed from main. Returns a function that unsubscribes. */
 function listen<T>(channel: string, callback: (value: T) => void): () => void {
@@ -50,6 +58,17 @@ const api = {
   sync: {
     status: (): Promise<SyncStatus> => ipcRenderer.invoke('sync:status'),
     now: (): Promise<SyncStatus> => ipcRenderer.invoke('sync:now'),
+  },
+
+  notion: {
+    /**
+     * Save the integration token. It is encrypted in the main process and
+     * there is no call that reads it back.
+     */
+    setToken: (token: string): Promise<ActionResult> => ipcRenderer.invoke('notion:setToken', token),
+    clearToken: (): Promise<void> => ipcRenderer.invoke('notion:clearToken'),
+    /** Check the saved token and report which sources it can read. */
+    test: (): Promise<ConnectionTest> => ipcRenderer.invoke('notion:test'),
   },
 
   reminders: {

@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain } from 'electron';
-import type { ActionResult, ManualReminder, ReminderItem, Settings, SyncStatus } from '../shared/types';
+import type { ActionResult, ConnectionTest, ManualReminder, ReminderItem, Settings, SyncStatus } from '../shared/types';
 import type { AlertService } from './alerts';
 import { deleteReminder, listReminders, saveReminder, setReminderDone } from './store/reminders';
 import { getSettings, updateSettings } from './store/settings';
@@ -11,6 +11,12 @@ export type IpcDeps = {
   sync: SyncService;
   /** Apply side effects of a settings change (popup look, login item). */
   onSettingsChanged: (settings: Settings) => void;
+  notion: {
+    /** Encrypt and store the token. Throws with a message for the form. */
+    saveToken: (token: string) => void;
+    clearToken: () => void;
+    test: () => Promise<ConnectionTest>;
+  };
 };
 
 /** Turn a thrown error into something the renderer can show inline. */
@@ -29,7 +35,7 @@ export function broadcast(channel: string, ...args: unknown[]): void {
  * Register every channel the renderer can call. The renderer has no Node
  * access; this file is the full list of what it is allowed to do.
  */
-export function registerIpc({ alerts, sync, onSettingsChanged }: IpcDeps): void {
+export function registerIpc({ alerts, sync, onSettingsChanged, notion }: IpcDeps): void {
   // --- Popup ---------------------------------------------------------------
   ipcMain.handle('popup:ready', () => popupPayload());
   ipcMain.on('popup:resize', (_event, height: number) => popupResized(height));
@@ -65,6 +71,25 @@ export function registerIpc({ alerts, sync, onSettingsChanged }: IpcDeps): void 
     alerts.tick();
     return sync.status();
   });
+
+  // --- Notion token -------------------------------------------------------
+  // The token only ever travels renderer -> main. Nothing sends it back.
+  ipcMain.handle('notion:setToken', async (_event, token: unknown): Promise<ActionResult> => {
+    try {
+      notion.saveToken(typeof token === 'string' ? token : '');
+      // Pull data with the new token right away.
+      void sync.syncNow().then(() => alerts.tick());
+      return { ok: true };
+    } catch (error) {
+      return failure(error);
+    }
+  });
+  ipcMain.handle('notion:clearToken', (): void => {
+    notion.clearToken();
+    // Without a token the cached Notion items are dropped too.
+    sync.clearRemote();
+  });
+  ipcMain.handle('notion:test', (): Promise<ConnectionTest> => notion.test());
 
   // --- Manual reminders ----------------------------------------------------
   // Each change re-reads local items and ticks, so a reminder set for "now"
