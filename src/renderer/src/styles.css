@@ -12,3 +12,110 @@ body,
   height: 100%;
   margin: 0;
 }
+
+/* The popup page paints nothing but the card, so the window stays see-through. */
+body.popup-page {
+  background: transparent;
+  overflow: hidden;
+  user-select: none;
+}
+
+/*
+ * The alert card. Every color comes from CSS variables built by
+ * shared/color.ts from the appearance settings. Only --nudge-bg has alpha.
+ */
+.nudge-card {
+  background: var(--nudge-bg);
+  color: var(--nudge-fg);
+  border: 1px solid var(--nudge-border);
+  border-radius: var(--nudge-radius);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+/* With an OS blur backdrop the card fills the window and the OS rounds it. */
+.nudge-card.nudge-card-flat {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Open: fade in with a slight scale-up, about 180 ms. */
+@keyframes nudge-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Close: quick fade-out. */
+@keyframes nudge-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+.nudge-anim-in {
+  animation: nudge-in 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.nudge-anim-out {
+  animation: nudge-out 140ms ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nudge-anim-in,
+  .nudge-anim-out {
+    animation-duration: 1ms;
+  }
+}
+
+/* Shared button looks, themed by the same variables. */
+.nudge-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: calc(min(var(--nudge-radius), 20px) * 0.5 + 4px);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--nudge-surface);
+  color: var(--nudge-fg);
+  transition: background-color 120ms ease;
+}
+
+.nudge-btn:hover:not(:disabled) {
+  background: var(--nudge-surface-hover);
+}
+
+.nudge-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.nudge-btn:focus-visible {
+  outline: 2px solid var(--nudge-accent-text);
+  outline-offset: 2px;
+}
+
+.nudge-btn-primary {
+  background: var(--nudge-accent);
+  color: var(--nudge-accent-fg);
+}
+
+.nudge-btn-primary:hover:not(:disabled) {
+  background: var(--nudge-accent-hover);
+}
